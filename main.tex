@@ -40,6 +40,43 @@
 
 \section{Electrical/Electronic Design}
 
+\subsubsection*{Things to Write}
+
+\begin{itemize}
+  \item Describe significant power, electrical, and electronic components in your vehicle, including electronics, computers, sensors, and motor controllers
+  \item Describe significant decisions made in designing/selecting the electrical and electronic components
+  \item Describe the power distribution system’s capacity, max. run time, recharge time, and safety
+  \item Clearly identify the aspects of your electrical and electronic components that are driven by each electrical/electronic components system requirement you listed.
+  \item For each electrical/electronic components system requirement you listed, compare the target value with the most recently measured actual value, and discuss what this tells you about your vehicle
+\end{itemize}
+
+\section{Perception}
+\subsubsection*{Things to Write}
+
+\begin{itemize}
+  \item If you are targeting both challenges, you must include separate discussions of how your perception system matches each course.
+  \item Describe processing of the sensor data to identify course features and items around the vehicle, including obstacles and lane markings, and the use of machine vision to perceive the environment.
+  \item If targeting AutoNav, describe how the system identifies lanes and obstacles.
+  \item If targeting SelfDrive, describe how the vehicle senses pedestrians, stop signs, and road obstacles.
+  \item Describe the internal representation of the course built from the perception data which is used by the driving logic. This might be a sophisticated internal representation of the environment or a simple list of features. Include a discussion of how it is created and updated as the robot moves.
+  \item Clearly identify how your design of the sensor data processing system was driven by the perception requirements you listed.
+  \item For each perception requirement you listed, compare the target value with the most recentlymeasured actual value, and discuss what this tells you about your vehicle
+  \item Developed a custom C++ Iterative Closest Point (ICP) node to process LiDAR point clouds for robust spatial mapping.
+  \item Implemented a 3D-to-2D vertical slicing filter (using ROS 2 pointcloud iterators) to compress 3D LiDAR data, isolating course obstacles at specific Z-heights while filtering out ground and ceiling noise to prevent false obstacle detection.
+\end{itemize}
+
+\section{Driving Logic}
+\subsubsection*{Things to Write}
+
+\begin{itemize}
+  \item If you are targeting both challenges, you must include separate discussions of how your driving logic matches each course.
+  \item Design of the lane following and obstacle avoidance systems must be specifically described, along with how the vehicle navigates through its environment. Describe how the system uses GPS for waypoint navigation and localization.
+  \item If targeting AutoNav, describe how your robot uses the perception system’s output and other information to follow lanes, detect and avoid obstacles, climb the ramp, and navigate to the GPS waypoints. Include how vehicle motion is generated and monitored to move the vehicle through the course, including how it deals with complex obstacles including switchbacks and center islands dead ends, traps, and potholes.
+  \item If targeting SelfDrive, describe how the vehicle uses the perception system’s output and otherinformation to follow the rules of the road while navigating the course that includes pedestrians,stop signs, road obstacles, and other items.
+  \item Clearly identify how your design was driven by the driving logic requirements you listed.
+  \item For each driving logic requirement you listed, compare the target value with the most recentlymeasured actual value, and discuss what this tells you about your vehicle
+\end{itemize}
+
 \section{Perception}
 
 \section{Driving Logic}
@@ -47,6 +84,16 @@
 \section{Key Performance Indicators}
 
 \section{Analysis of Complete Vehicle}
+
+\subsubsection*{Things to Write}
+
+\begin{itemize}
+  \item Describe lessons learned during construction and system integration
+  \item Identify key mechanical and electrical components that have failed during testing and discuss what changes you made to prevent repeat failures. Did your changes prevent repeat failures?
+  \item Describe your software testing, bug tracking, and version control processes
+  \item Describe your simulation-based testing process (e.g., Gazebo, etc.)
+  \item Describe physical testing to date (mechanical, electronic, indoors, real world, etc.) and identifykey differences in actual performance compared to predictions from simulation.
+\end{itemize}
 
 \section{Cyber Security Analysis}
 
