@@ -64,6 +64,7 @@
   \item Describe the power distribution system’s capacity, max. run time, recharge time, and safety
   \item Clearly identify the aspects of your electrical and electronic components that are driven by each electrical/electronic components system requirement you listed.
   \item For each electrical/electronic components system requirement you listed, compare the target value with the most recently measured actual value, and discuss what this tells you about your vehicle
+  \item Selected and integrated a WitMotion USB IMU and an RPLidar, interfacing them directly with our Jetson Nano via hardware serial and USB communication.
 \end{itemize}
 
 \section{Perception}
@@ -77,6 +78,8 @@
   \item Describe the internal representation of the course built from the perception data which is used by the driving logic. This might be a sophisticated internal representation of the environment or a simple list of features. Include a discussion of how it is created and updated as the robot moves.
   \item Clearly identify how your design of the sensor data processing system was driven by the perception requirements you listed.
   \item For each perception requirement you listed, compare the target value with the most recentlymeasured actual value, and discuss what this tells you about your vehicle
+  \item Developed a custom C++ Iterative Closest Point (ICP) node to process LiDAR point clouds for robust spatial mapping.
+  \item Implemented a 3D-to-2D vertical slicing filter (using ROS 2 pointcloud iterators) to compress 3D LiDAR data, isolating course obstacles at specific Z-heights while filtering out ground and ceiling noise to prevent false obstacle detection.
 \end{itemize}
 
 \section{Driving Logic}
@@ -89,6 +92,9 @@
   \item If targeting SelfDrive, describe how the vehicle uses the perception system’s output and otherinformation to follow the rules of the road while navigating the course that includes pedestrians,stop signs, road obstacles, and other items.
   \item Clearly identify how your design was driven by the driving logic requirements you listed.
   \item For each driving logic requirement you listed, compare the target value with the most recentlymeasured actual value, and discuss what this tells you about your vehicle
+  \item Engineered a state estimation pipeline using an Extended Kalman Filter (EKF) to fuse custom ICP odometry with IMU data.
+  \item Configured the EKF to rely on relative differential velocities rather than absolute positions, and isolated the IMU's angular velocity (Z-axis twist) while discarding absolute magnetic yaw to prevent sensor drift from fighting the LiDAR data.
+  \item Designed a decentralized ROS 2 node architecture that prevents timing deadlocks between the ICP node and the EKF, ensuring continuous broadcasting of the \texttt{odom} to \texttt{base\_link} coordinate transform.
 \end{itemize}
 
 \section{Key Performance Indicators}
@@ -109,6 +115,8 @@
   \item Describe your software testing, bug tracking, and version control processes
   \item Describe your simulation-based testing process (e.g., Gazebo, etc.)
   \item Describe physical testing to date (mechanical, electronic, indoors, real world, etc.) and identifykey differences in actual performance compared to predictions from simulation.
+  \item \textbf{Lessons Learned:} Early testing revealed that standard scan-to-keyframe ICP approaches cause compounding longitudinal drift when loop closures are rare. We mitigated this by transitioning to a sliding-window(maybe) optimization approach and integrating wheel encoder odometry directly from the motor controllers to anchor the vehicle's forward velocity.
+  \item \textbf{Simulation \& Data Sharing:} Established a \texttt{rosbag}-based data recording pipeline, allowing the perception sub-team to record raw synchronized LiDAR, IMU, and TF data from the physical robot and replay it seamlessly in simulated time for off-vehicle Occupancy Grid development.
 \end{itemize}
 
 \section{Cyber Security Analysis}
