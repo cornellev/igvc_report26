@@ -1,0 +1,19 @@
+Requirements that Guided Our Design of Driving Logic for AutoNav:
+The main requirements were staying within the lane and not hitting cones.  Our MPC planner defines cost for touching and 
+coming too close to the lane lines, cones, or other obstacles, and these requirements heavily guided our design because 
+failing one of these requirements would mean that our AutoNav run is invalid.
+
+Driving Logic for AutoNav:
+For AutoNav, we use a MPC planner in 2 different modes, lane and GPS planning.  In lane planning, we sample points along 
+a lane centerline as waypoints, and we use MPC to get to the next waypoint while minimizing cost by avoiding obstacles.  When 
+we approach a GPS waypoint, we switch to GPS mode, and then we add waypoints between the GPS waypoints that form the pair, and 
+again use MPC to travel along these waypoints.  The MPC creates trajectories which the car then follows, and progress is shown 
+by passing these generated waypoints and moving along the course.  There is no special logic for dealing with complex 
+obstacles, we rely on the MPC's planning to make good decisions.  To aid the MPC, we have a cost field that defines cost 
+at obstacles, and also defines cost near obstacles.
+
+Key Performance Indicators for MPC:
+TODO
+
+Analysis of Complete Vehicle:
+TODO.  We have a python ackermann simulation environment where we can create and edit maps, test, and debug...
