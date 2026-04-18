@@ -89,6 +89,19 @@
   \item If targeting SelfDrive, describe how the vehicle uses the perception system’s output and otherinformation to follow the rules of the road while navigating the course that includes pedestrians,stop signs, road obstacles, and other items.
   \item Clearly identify how your design was driven by the driving logic requirements you listed.
   \item For each driving logic requirement you listed, compare the target value with the most recentlymeasured actual value, and discuss what this tells you about your vehicle
+
+  \paragraph*{Extended Kalman Filter}
+
+    \begin{itemize}
+      \item Motivation for any KF/EKF: sensor data noise, physics doesn't accurately model the real world
+      \item List the states that the EKF tracks and what sensor inputs it uses
+      \item List general equations for an EKF in terms of prediction and update steps
+      \item Reference how the Ackermann physics model is used for informing EKF updates
+      \item Talk about shared memory system for reading from sensors and also writing EKF outputs
+      \item Describe how EKF is critical as an input to MPC so that we can generate accurate controls for the vehicle
+      \item Also talk about its uses in a dashboard or for vehicle analysis
+    \end{itemize}
+
 \end{itemize}
 
 \section{Key Performance Indicators}
