@@ -1,44 +1,148 @@
-\documentclass[11pt]{article}
-% Basic environment setup for the document
-\title{\textbf{IGVC Report 2026}}
-\author{Cornell Electric Vehicles Student Project Team}
-\usepackage[utf8]{inputenc}
-\usepackage{amsmath}
-\usepackage{bm}
-\usepackage{color}
-\usepackage{graphicx}
-\usepackage{tikz}
-\usepackage{hyperref}
+\documentclass{tmsce}
 
-\hypersetup{colorlinks=true, linkcolor=black,urlcolor=blue}
+\usepackage{amsmath,amsfonts,amsthm}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{array}
+\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+\usepackage{textcomp}
+\usepackage{stfloats}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{cite}
+\usepackage{pgfplots}
+\usepgfplotslibrary{statistics}
+\pgfplotsset{compat=1.18}
+\usepackage{tikz}
+\usetikzlibrary{positioning,calc,shapes.geometric,fit,backgrounds}
 
 \begin{document}
 
-% Cover Page 
-\maketitle
+% =========================================================
+% COVER PAGE — not counted towards page limit
+% =========================================================
+\newgeometry{left=1in,right=1in,top=0.4in,bottom=0.8in}
+\thispagestyle{empty}
 
+% ---- Section 1: title / logo / team ----
+\begin{center}
+  \vspace*{0.3cm}
+  {\fontsize{18}{22}\selectfont\bfseries Intelligent Ground Vehicle Competition 2026}\\[0.4em]
+  {\Large AutoNav \& Self-Drive}\\[1em]
+  \includegraphics[width=0.11\textwidth]{cevlogo.png}\\[0.5em]
+  {\Large\bfseries Cornell Electric Vehicles}\\[0.2em]
+  {\large Cornell University}
+  \vspace{0.3cm}
+\end{center}
+
+\noindent\rule{\textwidth}{1pt}
+
+% ---- Section 2: Design Report / vehicle ----
+\begin{center}
+  \vspace{0.1cm}
+  {\Large\bfseries Design Report}\\[0.3em]
+  {\normalsize [Vehicle Name]}\\[0.8em]
+  % Replace \fbox placeholder with \includegraphics{vehicle.png} when available
+  \fbox{\parbox[c][5cm][c]{0.6\textwidth}{\centering\normalsize [Vehicle Photo / Sketch]}}
+  \vspace{0.6cm}
+\end{center}
+
+\noindent\rule{\textwidth}{1pt}
+
+% ---- Section 3: certification + contacts/authors ----
+\vspace{0.5cm}
+\begin{center}
+  % Replace with \includegraphics[width=0.8\textwidth]{integrity.png} when available
+  \fbox{\parbox[c][2.2cm][c]{0.8\textwidth}{\centering\normalsize
+    [Faculty Advisor's Signed Statement of Integrity]}}
+\end{center}
+
+\vspace{0.6cm}
+\noindent
+\begin{minipage}[t]{0.48\textwidth}
+  \small
+  \textbf{Team Captain}\\
+  {Cam Mazzacane}\\
+  {\footnotesize clm357@cornell.edu $\cdot$ (585) 474-5070}\\[0.7em]
+  \textbf{Key Team Member}\\
+  {[Name]}\\
+  {\footnotesize [email@cornell.edu] $\cdot$ [Phone]}\\[0.7em]
+  \textbf{Faculty Advisor}\\
+  {[Name]}\\
+  {\footnotesize [email@cornell.edu] $\cdot$ [Phone]}
+\end{minipage}%
+\hfill
+\vrule width 0.4pt
+\hfill
+\begin{minipage}[t]{0.44\textwidth}
+  \small
+  {[Author Name]}\\[0.3em]
+  {[Author Name]}\\[0.3em]
+  {[Author Name]}\\[0.3em]
+  {[Author Name]}\\[0.3em]
+  {[Author Name]}\\[0.3em]
+  {[Author Name]}\\[0.3em]
+  {[Author Name]}
+\end{minipage}
+
+\restoregeometry
 \newpage
 
-% note: use asterisk for unnumbered sections
+% =========================================================
+% OPTIONAL TABLE OF CONTENTS — not counted towards page limit
+% =========================================================
+\thispagestyle{empty}
 \tableofcontents
 
 \newpage
 
-\section{System Requirements and Design}
+% =========================================================
+% BODY — page numbering starts here at page 1
+% =========================================================
+\setcounter{page}{1}
+\twocolumn[{\vspace{0.5em}}]
 
+\section{System Requirements and Design}
 \subsubsection*{Things to Write}
+
 \begin{itemize}
   \item Describe the system engineering process you followed to identify important System and Subsystem requirements.
   \item List at least 2 requirements for: (a) the mechanical design of your vehicle, (b) safety, (c) the electrical/electronic components
   \item For each challenge you are targeting (AutoNav and SelfDrive), list at least two requirements that guided your design for each of: (a) perception, (b) driving logic, and (c) key performance indicators.
-  \item For each requirement you listed (12 for one course, 18 if both) explain what in these ruels elsewhere that drives requirement, describe how you will quantifiably measure the requirement, and set a target value.
+  \item For each requirement you listed (12 for one course, 18 if both) explain what in these rules elsewhere that drives this requirement, describe how you will quantifiably measure the requirement, and set a target value.
 \end{itemize}
 
 \section{Mechanical Design}
+\subsubsection*{Things to Write}
+
+\begin{itemize}
+  \item Describe the mechanical design of your robot, including CAD or other drawings of your vehicle
+  \item Describe significant decisions on the frame structure, housing, and/or overall design
+  \item Describe significant components of your vehicle's drive system, electrical power system, and the control system that enables computer-controlled motion. Components acquired ready-made must be identified, but their internal components need not be described in detail.
+  \item Describe the significant mechanical components, including the frame, structure, suspension, housing, and weather proofing. Clearly identify the aspects of your mechanical design that are driven by each mechanical system requirement you listed.
+  \item For each mechanical requirement you listed, compare the target value with the most recently measured actual value, and discuss what this tells you about your vehicle
+\end{itemize}
 
 \section{Safety}
+\subsubsection*{Things to Write}
+
+\begin{itemize}
+  \item Describe the robot's safety aspects while being transported, parked, and charging.
+  \item Describe the robot's safety aspects while operating on the course(s), including the mechanical and wireless ESTOP systems.
+  \item Clearly identify the aspects of your safety efforts that are driven by each safety requirement you listed.
+  \item For each safety requirement you listed, compare the target value with the most recently measured actual value, and discuss what this tells you about your vehicle
+\end{itemize}
 
 \section{Electrical/Electronic Design}
+\subsubsection*{Things to Write}
+
+\begin{itemize}
+  \item Describe significant power, electrical, and electronic components in your vehicle, including electronics, computers, sensors, and motor controllers
+  \item Describe significant decisions made in designing/selecting the electrical and electronic components
+  \item Describe the power distribution system's capacity, max.\ run time, recharge time, and safety
+  \item Clearly identify the aspects of your electrical and electronic components that are driven by each electrical/electronic components system requirement you listed.
+  \item For each electrical/electronic components system requirement you listed, compare the target value with the most recently measured actual value, and discuss what this tells you about your vehicle
+\end{itemize}
 
 \subsubsection*{Things to Write}
 
@@ -78,12 +182,61 @@
 \end{itemize}
 
 \section{Perception}
+\subsubsection*{Things to Write}
+
+\begin{itemize}
+  \item If you are targeting both challenges, you must include separate discussions of how your perception system matches each course.
+  \item Describe processing of the sensor data to identify course features and items around the vehicle, including obstacles and lane markings, and the use of machine vision to perceive the environment.
+  \item If targeting AutoNav, describe how the system identifies lanes and obstacles.
+  \item If targeting SelfDrive, describe how the vehicle senses pedestrians, stop signs, and road obstacles.
+  \item Describe the internal representation of the course built from the perception data which is used by the driving logic. This might be a sophisticated internal representation of the environment or a simple list of features. Include a discussion of how it is created and updated as the robot moves.
+  \item Clearly identify how your design of the sensor data processing system was driven by the perception requirements you listed.
+  \item For each perception requirement you listed, compare the target value with the most recently measured actual value, and discuss what this tells you about your vehicle
+\end{itemize}
+
+\subsubsection*{Lane Segmentation Outline}
+\begin{itemize}
+  \item Two primary types of perception sensors, Stereo Cameras and LiDAR (will be described in earlier section)
+  \item Section on ML model selection for lane seg
+  \item Justification for why not to use Hough transform and Canny Edge Detection, describing what we did and why it didn't work in general (why ML is better)
+  \item Diagram of ML model, some fancy photos
+  \item Neural depth in the ZED cameras
+  \item Occupancy grid (this should be wherever in the pipeline it is, so may be part of the Planner section)
+  \item Considerations: environmental conditions (weather), obstacles
+  \item Course is relatively flat, lane seg runs at \textasciitilde15fps and corrects itself as it goes along the course / doesn't stick to early incorrect predictions
+\end{itemize}
 
 \section{Driving Logic}
+\subsubsection*{Things to Write}
+
+\begin{itemize}
+  \item If you are targeting both challenges, you must include separate discussions of how your driving logic matches each course.
+  \item Design of the lane following and obstacle avoidance systems must be specifically described, along with how the vehicle navigates through its environment. Describe how the system uses GPS for waypoint navigation and localization.
+  \item If targeting AutoNav, describe how your robot uses the perception system's output and other information to follow lanes, detect and avoid obstacles, climb the ramp, and navigate to the GPS waypoints. Include how vehicle motion is generated and monitored to move the vehicle through the course, including how it deals with complex obstacles including switchbacks and center islands, dead ends, traps, and potholes.
+  \item If targeting SelfDrive, describe how the vehicle uses the perception system's output and other information to follow the rules of the road while navigating the course that includes pedestrians, stop signs, road obstacles, and other items.
+  \item Clearly identify how your design was driven by the driving logic requirements you listed.
+  \item For each driving logic requirement you listed, compare the target value with the most recently measured actual value, and discuss what this tells you about your vehicle
+\end{itemize}
 
 \section{Key Performance Indicators}
+\subsubsection*{Things to Write}
+
+\begin{itemize}
+  \item If you are targeting both challenges, you must include separate discussions for each course.
+  \item Describe how you will measure each of the key performance indicators you selected to check that your robot is competitive on the target course(s), what value/result you are targeting, and how you selected that value/result for the KPI.
+  \item For each KPI requirement you listed, compare the target value with the most recently measured actual value, and discuss what this tells you about your vehicle
+\end{itemize}
 
 \section{Analysis of Complete Vehicle}
+\subsubsection*{Things to Write}
+
+\begin{itemize}
+  \item Describe lessons learned during construction and system integration
+  \item Identify key mechanical and electrical components that have failed during testing and discuss what changes you made to prevent repeat failures. Did your changes prevent repeat failures?
+  \item Describe your software testing, bug tracking, and version control processes
+  \item Describe your simulation-based testing process (e.g., Gazebo, etc.)
+  \item Describe physical testing to date (mechanical, electronic, indoors, real world, etc.) and identify key differences in actual performance compared to predictions from simulation.
+\end{itemize}
 
 \subsubsection*{Things to Write}
 
@@ -96,5 +249,11 @@
 \end{itemize}
 
 \section{Cyber Security Analysis}
+\subsubsection*{Things to Write}
+
+\begin{itemize}
+  \item Modern robotic and human driven vehicles are network-connected, contain large amounts of software from multiple vendors, and are an inviting target for cyber-attacks.
+  \item List 3 cyber vulnerabilities present in your vehicle and discuss what steps should be taken to harden/remove them before it enters series production and is widely deployed.
+\end{itemize}
 
 \end{document}
