@@ -1,0 +1,14 @@
+\section{Perception}
+\subsubsection*{Things to Write}
+
+\begin{itemize}
+  \item If you are targeting both challenges, you must include separate discussions of how your perception system matches each course.
+  \item Describe processing of the sensor data to identify course features and items around the vehicle, including obstacles and lane markings, and the use of machine vision to perceive the environment.
+  \item If targeting AutoNav, describe how the system identifies lanes and obstacles.
+  \item If targeting SelfDrive, describe how the vehicle senses pedestrians, stop signs, and road obstacles.
+  \item Describe the internal representation of the course built from the perception data which is used by the driving logic. This might be a sophisticated internal representation of the environment or a simple list of features. Include a discussion of how it is created and updated as the robot moves.
+  \item Clearly identify how your design of the sensor data processing system was driven by the perception requirements you listed.
+  \item For each perception requirement you listed, compare the target value with the most recentlymeasured actual value, and discuss what this tells you about your vehicle
+  \item Developed a custom C++ Iterative Closest Point (ICP) node to process LiDAR point clouds for robust spatial mapping.
+  \item Implemented a 3D-to-2D vertical slicing filter (using ROS 2 pointcloud iterators) to compress 3D LiDAR data, isolating course obstacles at specific Z-heights while filtering out ground and ceiling noise to prevent false obstacle detection.
+\end{itemize}
