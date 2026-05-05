@@ -66,7 +66,7 @@
   \item For each electrical/electronic components system requirement you listed, compare the target value with the most recently measured actual value, and discuss what this tells you about your vehicle
 \end{itemize}
 
-\section{Perception}
+\section{1}
 \subsubsection*{Things to Write}
 
 \begin{itemize}
@@ -80,6 +80,8 @@
 \end{itemize}
 
 \subsubsection*{Obstacle Segmentation}
+The 3D nature of point clouds allows partial understanding of the geometry and spatial positioning of both static and dynamic obstacles around the vehicle. Specifically, the on-vehicle RoboSense Helios 32 LiDAR provides reliable depth measurements and information of non-occluded obstacle surfaces, constrained to the vehicle's 360 field of view. As a result, these LiDAR scans will be used as the primary source of data for occupancy grid and cost map generation for the vehicle's local and global planning algorithms.
+
 \begin{itemize}
     \item How LiDAR scan is processed as raw points in PointCloud2 format to clusters in PointCloud2 format w/ clusterids to consistent clusters, birds-eye-view projection, and occupancy grid. The idea eventually is also to incorporate SLAM's output as a preferred (but optional) pre-processing step for LiDAR scans: either clustering takes in raw point cloud directly from the next LiDAR scan or the scan map outputted by SLAM (when we have loop closure). This means that the resulting BEV projection and occupancy grid can either be of one instance or a history of scans. Localization information is also necessary for obstacle tracking, as we want pre-deteremined orientation of the vehicle for static point cloud alignment. Specifically, we want there to be negligible transformation between static points over time, such that obstacle tracking can more accurately determine trajectories of dynamic and moving obstacles. Localization is given either as raw IMU data or as an output of SLAM. Once again, we will fallback to raw IMU data in case SLAM output has high uncertainty, but would preferably rely more on SLAM's output.
     \item LiDAR scan to clusters: this is done either by naive Euclidean or two-layer-graph clustering. 
