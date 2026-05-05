@@ -10,13 +10,39 @@
   \item For each driving logic requirement you listed, compare the target value with the most recentlymeasured actual value, and discuss what this tells you about your vehicle
 \end{itemize}
 
-\subsection*{Extended Kalman Filter}
-\textit{I think that this goes here, if not we can move it to the "Driving Logic" section}
+\subsection{Extended Kalman Filter}
 
-Main things to higlight here:
-\begin{itemize}
-  \item JAX implementation of EKF and \textit{high level} of how dynamics were formulated
-  \item System assumptions and why they were made
-  \item Performance evaluation and observability of the system as a whole
-  \item Link to repository
-\end{itemize}
+Our vehicle makes use of a \textbf{custom Extended Kalman Filter (EKF)} to estimate the vehicle's state. For the general kinematics, the state is defined as:
+$$
+\mathbf{x}=
+\begin{bmatrix}
+p_W \in \mathbb{R}^3 \\
+R_{WB} \in SO(3) \\
+v_W \in \mathbb{R}^3 \\
+\omega_B \in \mathbb{R}^3 \\
+\Omega_W \in \mathbb{R}^4
+\end{bmatrix}
+$$
+However, due to the group $SO(3)$ being a \textit{non-Euclidean manifold}, this means that we cannot simply add or subtract orientation errors like the other states. This means that we need a local linear space, which is provided by the lie algebra $\mathfrak{so}(3)$, which is the tangent space of $SO(3)$. This allows us to define the error state as:
+
+$$
+\delta{\mathbf{x}} =
+\begin{bmatrix}
+\delta{p_W} \in \mathbb{R}^3 \\
+\delta\theta \in \mathfrak{so}(3) \\ \delta{v_W} \in \mathbb{R}^3 \\
+\delta{\omega_B} \in \mathbb{R}^3 \\
+\delta{\Omega_W} \in \mathbb{R}^4
+\end{bmatrix}
+$$
+
+This means that we can formulate the rotation update in error space as $\keepmath{R^+=R_\mathrm{nom} \exp(\delta \theta^\times)}$ which makes use of the Rodrigues' formula (using $\keepmath{\exp(\delta \theta^\times)\approx I + \delta \theta^\times}$ for small angle changes) to compute the exponential map from $\mathfrak{so}(3)$ to $SO(3)$. This allows us to properly handle the non-linearities of the orientation state in our EKF, ensuring accurate state estimation for our vehicle.
+
+Another unique aspect of the filter is that the $F$ and $G$ linearization matrices are computed using automatic differentiation via \texttt{JAX}. This is due to the complex dynamics formulated for the vehicle, which include non-linear slip and contact tire models, and full rigid body dynamics of the entire vehicle, including tire spin as exponential decay. With all of this, this allows us to formulate the filter predict and update steps as the following:
+\begin{gather*}
+  \text{\textbf{Predict:}}\qquad \hbf{x}_{k+1|k} = f(\hbf{x}_\mathrm{nom}, \mathbf{u}_k, \Delta t) \\
+  \text{\textbf{Update: }}\qquad \hbf{x}_{k+1|k} = P_{k+1|k+1} = (I-KH)P_{k+1|k}(I-KH)^\top + KRK^\top \\
+\end{gather*}
+The full dynamics are formulated at \href{https://github.com/cornellev/ackermann-jax}{this repository}. These are then also fed into a custom Model Predictive Control (MPC) model, which is detailed in the next subsection.
+
+
+\subsection{Model Predictive Control}
