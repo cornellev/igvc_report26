@@ -104,4 +104,13 @@ This formulation allows us to write the entire trajectory as a \textit{linear fu
 
 Where $\bar{Q}=\mathrm{blkdiag}(Q,\dots,Q,P_f)$ and $\bar{R}=\mathrm{blkdiag}(R,\dots,R,P_f)$, and we omit the terminal cost weighting $\delta \mathbf{x}_N^\top P_f \delta\mathbf{x}_N$ for brevity.
 
-This is included in the same repository as above, and allows for simultaneous execution of both the localization and control frameworks into a single package. Furthermore, this allows us to have a robust control algorithm that requires little to no hand tuning of the controller, but rather tuning the dynamics themselves to ensure that the physical qunatities are represented properly.
+Finally, this culminates in solving for the optimal $\mathbf{U}$ history via a QP as the following:
+
+\begin{equation}
+  \begin{gathered}
+  \mathbf{U}_\mathrm{opt} = \underset{\mathbf{U}}{\mathrm{argmin}}\  \mathbf{U}^\top H \mathbf{U}+2 f^\top \mathbf{U} \\
+  \mathrm{s.t.} \quad A\mathbf{u} \leq \mathbf{b}
+\end{gathered}
+\end{equation}
+
+Where $A$ and $b$ are constriant matrices that allow us to control various aspects of the controller to fit our system. This is included in the same repository as above, and allows for simultaneous execution of both the localization and control frameworks into a single package. Furthermore, this allows us to have a robust control algorithm that requires little to no hand tuning of the controller, but rather tuning the dynamics themselves to ensure that the physical qunatities are represented properly.
