@@ -9,3 +9,17 @@
   \item Clearly identify how your design was driven by the driving logic requirements you listed.
   \item For each driving logic requirement you listed, compare the target value with the most recentlymeasured actual value, and discuss what this tells you about your vehicle
 \end{itemize}
+
+
+
+\subsubsection*{Self-Drive}
+
+For the self-drive challenge, we decided to introduce a state machine to control the behavior of the vehicle for each individual challenge (and the overall challenge).
+We believed that an end-to-end learning approach would be inefficient and would not allow us to easily debug the system, so we opted for a more modular approach. 
+The state machine allows us to easily switch between different behaviors (e.g., lane following, obstacle avoidance) based on the current situation.
+Our state machine controls a "scene manager" that takes in the perception system's output and other information to determine the current state of the vehicle and what actions to take.
+Additionally, it can "tweak" its surroundings by enabling and disabling what goes into the occupancy grid, which allows us to perform routines like merging.
+
+We use our lane segmentation to inform our MPC controller, which generates the appropriate steering and throttle commands to follow the lanes.
+We also use our LiDAR and cameras to detect obstacles and pedestrians, which informs our MPC controller to avoid collisions and navigate safely through the course.
+Our object detection system allows us to use our stop sign perception to inform what to do at stop signs, thus informing our state machine to stop and wait for the appropriate amount of time before proceeding.
