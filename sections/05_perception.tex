@@ -12,3 +12,25 @@
   \item Developed a custom C++ Iterative Closest Point (ICP) node to process LiDAR point clouds for robust spatial mapping.
   \item Implemented a 3D-to-2D vertical slicing filter (using ROS 2 pointcloud iterators) to compress 3D LiDAR data, isolating course obstacles at specific Z-heights while filtering out ground and ceiling noise to prevent false obstacle detection.
 \end{itemize}
+
+\subsubsection*{Obstacle Segmentation}
+The 3D nature of point clouds allows partial understanding of the geometry and spatial positioning of both static and dynamic obstacles around the vehicle. Specifically, the on-vehicle RoboSense 
+Helios 32 LiDAR provides reliable depth measurements and information of non-occluded obstacle surfaces, constrained to the vehicle's 360 field of view. As a result, these LiDAR scans will be used 
+as the primary source of data for occupancy grid and cost map generation for the vehicle's local and global planning algorithms.
+
+RoboSense Helios 32 LiDAR scans are processed in real-time as raw points in PointCloud2 format and converted into Nav2 costmaps as input for the vehicle's planning algorithms. 
+
+Point cloud clustering enables the processing of raw 3D LiDAR data into per-obstacle representation that better captures the spatial properties of obstacles around the vehicle. 
+Clustering is achieved by running either naive Euclidean distance or two layer graph clustering. 
+
+Given a raw 3D LiDAR scan, the Euclidean cluster algorithm iterates through all points of the input point cloud and will either start a new cluster to grow or continue to add new neighboring points to the current cluster that is being grown. This algorithm will initialize a cluster or array of 3D points by sampling uniformly at random a point from the set of unclustered seeds. Then, through traversal of a KD-tree containing all 3D points, nearest neighbors
+of the currently explored point will be added to the cluster if the Euclidean distance between explored and newly discovered points are within a pre-defined threshold. To account for the inverse relation between point density and distance from LiDAR origin, this distance threshold scales with how far the explored point is from the LiDAR origin.
+Only unclustered points can be added to the currently grown cluster, and only when there exists no more unclustered points that satisfy the Euclidean distance condition will the cluster's growth be complete. New clusters will be initialized until there are no more unclustered point from the original raw 3D LiDAR scan. 
+Given that this is a sequential process that depends on the structure of existing clusters, full parallelization is difficult.
+
+Two layer graph clustering takes advantage of the vertical and horizontal angle resolutions of LiDAR hardware for optimization and requires two separate segmentations of the point cloud. The first segmentation involves clustering points within a threshold along the same horizontal ring -- rays projected from LiDAR origin to points belonging to the same horizontal ring possess the same vertical angle from the ground plane.  
+A range graph consists of range graph nodes that contain information about the resulting per-horizontal ring clusters: including the corresponding horizontal ring index and the leftmost and rightmost points of that cluster. The construction of the range graph can be parallelized across horizontal rings.
+Given that the first segmentation already encodes some understanding of horizontal separations between clusters, the second segmentation involves performing BFS on this range graph and merging nodes that are within a pre-defined vertical distance threshold. Despite having to search through all permutations of the range graph for accurate merging, the number of nodes to search through in the range graph is significantly smaller than the total number of points in the raw LiDAR scan. 
+This is proposed to be linear runtime.
+
+Given the assumption that clustering outputs accurately captures the state of obstacles around the vehicle, obstacle tracking constructs a cost matrix populated by how well past and current clusters via oriented bounding box overlap. Hungarian Algorithm for max bipartite matching is utilized to generate matchings between past and current clusters that minimizes the total cost of overlapping. These matchings are used to update current clusters with their corresponding past clusters' clusterid. 
