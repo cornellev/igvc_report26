@@ -12,3 +12,82 @@
   \item Developed a custom C++ Iterative Closest Point (ICP) node to process LiDAR point clouds for robust spatial mapping.
   \item Implemented a 3D-to-2D vertical slicing filter (using ROS 2 pointcloud iterators) to compress 3D LiDAR data, isolating course obstacles at specific Z-heights while filtering out ground and ceiling noise to prevent false obstacle detection.
 \end{itemize}
+
+\subsection{Object Detection Pipeline}
+ 
+Object detection on the Self Drive course relies on a custom five-class
+YOLO11 model that recognizes barrels, stop signs, tires, mannequins,
+and potholes. The model runs on the vehicle in a ROS~2 node paired with
+a ZED~2 stereo camera.
+ 
+\paragraph{Dataset generation.} We built a separate single-class
+dataset for each of the five categories. Keeping them separate at this
+stage meant each dataset could be sourced, labelled, and checked on its
+own. Every dataset uses the standard YOLO layout:
+\texttt{train}/\texttt{val}/\texttt{test} splits, each with
+\texttt{images} and \texttt{labels} directories and one normalized
+\texttt{[class\_id, cx, cy, w, h]} label file per image. Before
+training, we checked label quality with a visualization tool that draws
+each label file's bounding boxes back onto its image, which made bad
+annotations easy to spot. We then fine-tuned a YOLO11n detector on each
+dataset.
+ 
+\paragraph{Dataset merge.} An automated pipeline merges the five
+single-class datasets into one five-class dataset. For every image it
+keeps the original ground-truth labels, and it also runs every other
+category's detector over that image to add cross-class pseudo-labels.
+This matters because an image collected for one class often contains
+unlabelled objects of another; without the pseudo-labels, the merged
+model would be trained to treat those correct detections as mistakes.
+Per-class confidence thresholds---0.30 for barrels, tires, and stop
+signs, 0.35 otherwise---decide which pseudo-labels are kept. To keep
+the merge practical on large datasets, it batches GPU inference,
+overlaps file I/O with a thread pool, and writes an atomic checkpoint
+after each batch so a crash does not mean starting over. The merged
+\texttt{data.yaml} keeps the train/validation split intact. A single
+YOLO11 model is then trained on the merged dataset, and those weights
+are the detector we deploy on the vehicle.
+ 
+\paragraph{ZED ROS 2 node.} On the vehicle, the merged model runs
+inside the \texttt{yolo\_zed\_node} ROS~2 node. At startup the node
+loads the model and reads its class set from a YAML file. Each frame,
+it grabs a synchronized left RGB image and XYZ point cloud from the
+ZED~2 and runs the image through the model. For each bounding box, it
+samples a small point-cloud window around the box centre and takes the
+median, minimum, and maximum range. NaN and non-finite returns are
+dropped first, so a few bad pixels cannot throw off the reported
+distance.
+ 
+\paragraph{Internal representation.} The node publishes a
+\texttt{YoloDetectionArray} message on \texttt{/yolo\_detections}. The
+array has one fixed entry per model class, including classes not seen
+in the current frame (their \texttt{detected} flag is false), so a
+subscriber can index any class directly without checking whether the
+field exists. Each entry holds the class name, confidence, pixel
+bounding box, min/median/max range, and 3D position $(x, y, z)$ in
+metres. The array is rebuilt from scratch every frame instead of being
+accumulated, so it always shows what is currently visible---an object
+drops out once it leaves the field of view and reappears on the first
+frame it is detected again.
+ 
+\paragraph{Performance.} \textit{we lwk did not take performance metrics, but will add them later if we have time}
+ 
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{p{3.6cm} p{2.4cm} p{2.4cm} p{4.0cm}}
+\hline
+\textbf{Requirement} & \textbf{Target} & \textbf{Measured} &
+\textbf{What This Tells Us} \\
+\hline
+Merged model detection accuracy (mAP@0.5) &
+[PLACEHOLDER] & [PLACEHOLDER] & [PLACEHOLDER] \\
+\hline
+Detection node frame rate &
+[PLACEHOLDER] & [PLACEHOLDER] & [PLACEHOLDER] \\
+\hline
+Reported range vs.\ ground-truth distance &
+[PLACEHOLDER] & [PLACEHOLDER] & [PLACEHOLDER] \\
+\hline
+\end{tabular}
+\end{table}
