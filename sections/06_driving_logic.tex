@@ -1,0 +1,23 @@
+\section{Driving Logic}
+\subsubsection*{Things to Write}
+
+\begin{itemize}
+  \item If you are targeting both challenges, you must include separate discussions of how your driving logic matches each course.
+  \item Design of the lane following and obstacle avoidance systems must be specifically described, along with how the vehicle navigates through its environment. Describe how the system uses GPS for waypoint navigation and localization.
+  \item If targeting AutoNav, describe how your robot uses the perception system’s output and other information to follow lanes, detect and avoid obstacles, climb the ramp, and navigate to the GPS waypoints. Include how vehicle motion is generated and monitored to move the vehicle through the course, including how it deals with complex obstacles including switchbacks and center islands dead ends, traps, and potholes.
+  \item If targeting SelfDrive, describe how the vehicle uses the perception system’s output and otherinformation to follow the rules of the road while navigating the course that includes pedestrians,stop signs, road obstacles, and other items.
+  \item Clearly identify how your design was driven by the driving logic requirements you listed.
+  \item For each driving logic requirement you listed, compare the target value with the most recentlymeasured actual value, and discuss what this tells you about your vehicle
+\end{itemize}
+
+\paragraph*{Extended Kalman Filter}
+
+    \begin{itemize}
+      \item Motivation for any KF/EKF: sensor data noise, physics doesn't accurately model the real world
+      \item List the states that the EKF tracks and what sensor inputs it uses
+      \item List general equations for an EKF in terms of prediction and update steps
+      \item Reference how the Ackermann physics model is used for informing EKF updates
+      \item Talk about shared memory system for reading from sensors and also writing EKF outputs
+      \item Describe how EKF is critical as an input to MPC so that we can generate accurate controls for the vehicle
+      \item Also talk about its uses in a dashboard or for vehicle analysis
+    \end{itemize}
